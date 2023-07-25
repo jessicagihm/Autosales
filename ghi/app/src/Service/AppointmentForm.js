@@ -93,6 +93,10 @@ useEffect(() => {
               <label htmlFor="customer">Customer</label>
             </div>
             <div className="form-floating mb-3">
+              <input onChange={handleStatusChange} value={customer} placeholder="Customer" required type="text" name="customer" id="customer" className="form-control"/>
+              <label htmlFor="customer">Customer</label>
+            </div>
+            <div className="form-floating mb-3">
               <input onChange={handleDateTimeChange} value={dateTime} placeholder="Date and Time" required type="datetime-local" name="date_time" id="date_time" className="form-control"/>
               <label htmlFor="date_time">Date and Time</label>
             </div>

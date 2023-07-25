@@ -11,10 +11,14 @@ from .views import (
 
 urlpatterns = [
     path("technicians/", api_list_technicians, name="api_list_technicians"),
-    path("technicians/<int:pk>/", api_detail_technician, name="api_detail_technician"),
+    path("technicians/<int:pk>/",
+         api_detail_technician, 
+         name="api_detail_technician"),
     path("appointments/", api_list_appointments, name="api_list_appointments"),
-    path("appointments/<int:pk>/", api_detail_appointment, name="api_detail_appointment"),
+    path("appointments/<int:pk>/",
+         api_detail_appointment,
+         name="api_detail_appointment"),
     path("appointments/<int:id>/cancel/", api_cancel_appointment),
     path("appointments/<int:id>/finish/", api_finish_appointment),
-    
+
 ]

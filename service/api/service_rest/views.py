@@ -124,7 +124,6 @@ def api_list_appointments(request):
         )
 
 
-
 @require_http_methods(["GET", "DELETE"])
 def api_detail_appointment(request, pk):
     if request.method == "GET":
@@ -169,4 +168,3 @@ def api_finish_appointment(request, id):
     appointment.save()
 
     return JsonResponse(appointment, encoder=AppointmentEncoder, safe=False)
-
