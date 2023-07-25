@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useEffect, useState } from "react";
 
 function TechnicianList() {
-    const [technicians, setTechnician] = useState([]);
+    const[technicians, setTechnician] = useState([]);
 
-}
+    const fetchData = async () => {
+        const response = await fetch('http://localhost:8080/api/technicians/');
+        const data = await response.json();
+        setTechnician(data.technicians)
 
-async function fetchData() {
-    const url = 'http://localhost:8080/api/technicians/'
-    const response = await fetch(url);
-
-    if (response.ok) {
-      const data = await response.json();
-      setTechnician(data.technicians);
     }
-}
-    useEffect(() => {
-      fetchData();
 
-  }, []);
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+
 
 
   return(
@@ -41,12 +37,14 @@ async function fetchData() {
                         <td>{ technician.first_name}</td>
                         <td>{ technician.last_name}</td>
                     </tr>
-                )
-            })}
-        </tbody>
-    </table>
+                    )
+                })}
+            </tbody>
+        </table>
     </div>
-);
+    );
 }
+
+
 
 export default TechnicianList;

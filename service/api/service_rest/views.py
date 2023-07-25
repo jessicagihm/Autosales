@@ -54,9 +54,9 @@ def api_list_technicians(request):
     else:
         try:
             content = json.loads(request.body)
-            technician = Technician.objects.create(**content)
+            technicians = Technician.objects.create(**content)
             return JsonResponse(
-                technician,
+                technicians,
                 encoder=TechnicianEncoder,
                 safe=False,
             )

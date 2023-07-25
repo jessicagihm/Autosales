@@ -1,17 +1,16 @@
 import React,{useEffect, useState} from "react";
 
 
-function AppointmenList() {
+function AppointmentList() {
     const [appointments, setAppointments] = useState([]);
 
     const fetchData = async () => {
-        const url = 'http://localhost:8080/api/appointments/';
-        const response = await fetch(url)
-
-        if (response.ok) {
-            const data = await response.json();
-            setAppointments(data.appointments)
+        const response = await fetch('http://localhost:8080/api/appointments/');
+        const data = await response.json();
+        setAppointments(data.appointments)
         }
+
+
         const finishAppointment = async (id) => {
             const response = await fetch(`http://localhost:8080/api/appointments/${id}/finish/`, {
                 method: 'PUT',
@@ -29,6 +28,8 @@ function AppointmenList() {
         }, [])
 
         return(
+            <div>
+            <h1>Service Appoinments</h1>
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -41,7 +42,7 @@ function AppointmenList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {appointments}.map(appointment) => {
+                    {appointments.map(appointment => {
                         return (
                             <tr key={ appointment.id}>
                                 <td>{ appointment.vin }</td>
@@ -49,14 +50,19 @@ function AppointmenList() {
                                 <td>{ appointment.date_time}</td>
                                 <td>{ appointment.technician.first_name}</td>
                                 <td>{ appointment.reason}</td>
-                            <td>
-                                <button onClick={() => finishAppointment ( appointment.id )}>Finish</button>
-                            </td>
+                                <td><button type="button"
+                                    className='btn btn-success options-outlined'
+                                    onClick={() => finishAppointment(appointment.id)}>Finish</button></td>
+                                <td><button type="button"
+                                    className='btn btn-danger options-outlined'
+                                    onClick={() => cancelAppointment(appointment.id)}>Cancel</button></td>
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
         </div>
-        );
-    }
+    );
+}
+
+export default AppointmentList;

@@ -25,7 +25,7 @@ useEffect(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
-      date_time: dateTime,
+      dateTime,
       reason,
       status,
       vin,
@@ -35,7 +35,7 @@ useEffect(() => {
 
     const appointmentUrl = 'http://localhost:8080/api/appointments/';
     const fetchConfig = {
-      method: 'post',
+      method: 'POST',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
