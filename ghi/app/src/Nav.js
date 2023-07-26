@@ -22,7 +22,6 @@ function Nav() {
                   Service
                   </a>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-
                   <li>
                     <NavLink className="dropdown-item" to="/technician/create">
                       Add a Technician

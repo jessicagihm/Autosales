@@ -2,30 +2,31 @@ import React, { useState, useEffect } from 'react';
 
 
 function AppointmentForm() {
-const [dateTime, setDateTime] = useState('');
-const [reason, setReason] = useState('');
-const [status, setStatus] = useState('');
-const [vin, setVin] = useState('');
-const [customer, setCustomer] = useState('');
-const [technician, setTechnician] = useState('');
+  const [dateTime, setDateTime] = useState('');
+  const [reason, setReason] = useState('');
+  const [status, setStatus] = useState('');
+  const [vin, setVin] = useState('');
+  const [customer, setCustomer] = useState('');
+  const [technician, setTechnician] = useState('');
+  const [technicians, setTechnicians] = useState([]);
 
-useEffect(() => {
+
+  useEffect(() => {
     async function getTechnician() {
       const url = 'http://localhost:8080/api/technicians/';
       const response = await fetch(url);
       if (response.ok) {
         const data = await response.json();
-        setTechnician(data.technicians);
+        setTechnicians(data.technicians);
       }
     }
     getTechnician();
   }, []);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
-      dateTime,
+      date_time: dateTime,
       reason,
       status,
       vin,
@@ -35,7 +36,7 @@ useEffect(() => {
 
     const appointmentUrl = 'http://localhost:8080/api/appointments/';
     const fetchConfig = {
-      method: 'POST',
+      method: 'post',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
@@ -93,17 +94,13 @@ useEffect(() => {
               <label htmlFor="customer">Customer</label>
             </div>
             <div className="form-floating mb-3">
-              <input onChange={handleStatusChange} value={customer} placeholder="Customer" required type="text" name="customer" id="customer" className="form-control"/>
-              <label htmlFor="customer">Customer</label>
-            </div>
-            <div className="form-floating mb-3">
               <input onChange={handleDateTimeChange} value={dateTime} placeholder="Date and Time" required type="datetime-local" name="date_time" id="date_time" className="form-control"/>
               <label htmlFor="date_time">Date and Time</label>
             </div>
             <div className="mb-3">
               <select required onChange={handleTechnicianChange} name="technician" id="technician" className="form-select" value={technician}>
                 <option value="">Choose a technician</option>
-                {technician.map((technician) => {
+                {technicians.map((technician) => {
                   return (
                     <option key={technician.id} value={technician.id}>
                       {technician.first_name} {technician.last_name}
@@ -120,9 +117,8 @@ useEffect(() => {
           </form>
         </div>
       </div>
-      </div>
+    </div>
   );
 }
-
 
 export default AppointmentForm;

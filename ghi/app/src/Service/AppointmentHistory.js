@@ -4,8 +4,6 @@ function AppointmentHistory() {
   const [appointments, setAppointments] = useState([]);
   const [searchText, setSearchText] = useState("");
 
-
-
   const fetchAppointments = async () => {
     const response = await fetch('http://localhost:8080/api/appointments/');
     if (response.ok) {
@@ -82,4 +80,5 @@ function AppointmentHistory() {
 }
 
 export default AppointmentHistory;
+
 
