@@ -36,7 +36,7 @@ function AppointmentForm() {
 
     const appointmentUrl = 'http://localhost:8080/api/appointments/';
     const fetchConfig = {
-      method: 'post',
+      method: 'POST',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',

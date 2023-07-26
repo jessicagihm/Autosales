@@ -12,7 +12,7 @@ function TechnicianList() {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, []);
 
 
 
