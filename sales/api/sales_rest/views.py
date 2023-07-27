@@ -38,6 +38,7 @@ class SalesPersonDetailEncoder(ModelEncoder):
         "employee_id",
         "first_name",
         "last_name",
+        "custom_id",
     ]
 
 

@@ -10,6 +10,7 @@ class Salesperson(models.Model):
     first_name = models.CharField(max_length=200, verbose_name="First name")
     last_name = models.CharField(max_length=200, verbose_name="Last name")
     employee_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    custom_id = models.CharField(max_length=200, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.employee_id:
