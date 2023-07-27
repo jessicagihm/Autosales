@@ -30,7 +30,7 @@ def api_automobiles(request):
                 encoder=AutomobileEncoder,
                 safe=False,
             )
-        except:
+        except Automobile.DoesNotExist:
             response = JsonResponse(
                 {"message": "Could not create the automobile"}
             )
@@ -63,7 +63,7 @@ def api_automobile(request, vin):
             )
         except Automobile.DoesNotExist:
             return JsonResponse({"message": "Does not exist"})
-    else: # PUT
+    else:  # PUT
         try:
             content = json.loads(request.body)
             auto = Automobile.objects.get(vin=vin)
@@ -101,7 +101,7 @@ def api_manufacturers(request):
                 encoder=ManufacturerEncoder,
                 safe=False,
             )
-        except:
+        except Manufacturer.DoesNotExist:
             response = JsonResponse(
                 {"message": "Could not create the manufacturer"}
             )
@@ -134,7 +134,7 @@ def api_manufacturer(request, pk):
             )
         except Manufacturer.DoesNotExist:
             return JsonResponse({"message": "Does not exist"})
-    else: # PUT
+    else:  # PUT
         try:
             content = json.loads(request.body)
             manufacturer = Manufacturer.objects.get(id=pk)
@@ -175,7 +175,7 @@ def api_vehicle_models(request):
                 encoder=VehicleModelEncoder,
                 safe=False,
             )
-        except:
+        except VehicleModel.DoesNotExist:
             response = JsonResponse(
                 {"message": "Could not create the vehicle model"}
             )
@@ -208,7 +208,7 @@ def api_vehicle_model(request, pk):
             )
         except VehicleModel.DoesNotExist:
             return JsonResponse({"message": "Does not exist"})
-    else: # PUT
+    else:  # PUT
         try:
             content = json.loads(request.body)
             model = VehicleModel.objects.get(id=pk)
