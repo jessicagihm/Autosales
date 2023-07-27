@@ -1,7 +1,9 @@
 from django.urls import path
 from . import views
+from .views import AutomobilesView
 
 urlpatterns = [
+    path("api/automobiles/", AutomobilesView.as_view()),
     path("salespeople/", views.api_list_salespeople, name="list_salespeople"),
     path(
         "salespeople/<int:id>/",
@@ -17,5 +19,4 @@ urlpatterns = [
         views.api_automobile_vo_detail,
         name="detail_automobile",
     ),
-    # add more paths as needed
 ]

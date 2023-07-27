@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-function CustomerDetail({ getCustomers, setDeleted, setDeleteMessage, setEdited }) {
+function CustomerDetail({ getCustomers, setDeleteMessage, setEdited }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [customer, setCustomer] = useState(null);
@@ -40,12 +40,12 @@ function CustomerDetail({ getCustomers, setDeleted, setDeleteMessage, setEdited 
 
   const handleDelete = async () => {
     try {
-      await deleteCustomer(customer.id, navigate);  // pass navigate here
+      await deleteCustomer(customer.id, navigate);
       setMessage('Customer deleted');
-      setDeleteMessage('Customer deleted'); // set delete message here
+      setDeleteMessage('Customer deleted');
       setTimeout(() => {
         setMessage(null);
-        getCustomers(); // Fetch customers data after deleting a customer
+        getCustomers();
         navigate('/customers');
       }, 2000);
     } catch (error) {
@@ -90,7 +90,7 @@ function CustomerDetail({ getCustomers, setDeleted, setDeleteMessage, setEdited 
         await updateCustomer(editedCustomer);
         setIsEditing(false);
         setMessage('Profile edited');
-        setEdited(true); // add this
+        setEdited(true);
         setTimeout(() => {
           setMessage(null);
           navigate('/customers', { state: { message: 'Profile edited' } });

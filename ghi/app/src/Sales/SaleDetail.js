@@ -136,8 +136,7 @@ function SaleDetail({ getSales, setDeleted, setDeleteMessage, setEdited }) {
         </form>
       ) : (
         <div className="card-body">
-          <h5 className="card-title">Sale ID: {sale.sale_id}</h5>
-          <p className="card-text">Automobile: {sale.automobile}</p>
+          <h5 className="card-title">Automobile: {sale.automobile}</h5>
           <p className="card-text">Salesperson: {sale.salesperson}</p>
           <p className="card-text">Customer: {sale.customer}</p>
           <p className="card-text">Price: {sale.price}</p>

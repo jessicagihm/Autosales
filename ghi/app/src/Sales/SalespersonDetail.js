@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 
 
-function SalespersonDetail({ getSalespeople, setDeleted, setDeleteMessage, setEdited }) {
+function SalespersonDetail({ getSalespeople, setDeleteMessage, setEdited }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [salesperson, setSalesperson] = useState(null);
@@ -93,7 +93,7 @@ function SalespersonDetail({ getSalespeople, setDeleted, setDeleteMessage, setEd
         await updateSalesperson(editedSalesperson);
         setIsEditing(false);
         setMessage('Profile edited');
-        setEdited(true); // add this
+        setEdited(true);
         setTimeout(() => {
           setMessage(null);
           navigate('/salespeople', { state: { message: 'Profile edited' } });

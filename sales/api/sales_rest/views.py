@@ -2,10 +2,17 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Salesperson, Customer, Sale, AutomobileVO
 import json
+from django.views import View
 from common.json import ModelEncoder
 from django.views.decorators.http import require_http_methods
 from django.forms.models import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
+
+
+class AutomobilesView(View):
+    def get(self, request):
+        automobiles = list(AutomobileVO.objects.values())
+        return JsonResponse({"automobiles": automobiles})
 
 
 class AutomobileVODetailEncoder(DjangoJSONEncoder):
@@ -243,7 +250,7 @@ def api_sales(request):
             automobile=automobile,
             salesperson=salesperson,
             customer=customer,
-            **content,  # Other fields (like 'price') go here
+            **content,
         )
     except Exception as e:
         return JsonResponse(

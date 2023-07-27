@@ -1,5 +1,3 @@
-# Here is how you could alter the models to adhere to the best practices
-
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -57,30 +55,35 @@ class Sale(models.Model):
     automobile = models.ForeignKey(
         AutomobileVO,
         on_delete=models.CASCADE,
-        related_name="sales",  # Added related_name
+        related_name="sales",
         verbose_name="Automobile",
     )
     salesperson = models.ForeignKey(
         Salesperson,
         on_delete=models.CASCADE,
-        related_name="sales",  # Added related_name
+        related_name="sales",
         verbose_name="Salesperson",
     )
     customer = models.ForeignKey(
         Customer,
         on_delete=models.CASCADE,
-        related_name="sales",  # Added related_name
+        related_name="sales",
         verbose_name="Customer",
     )
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Price")
     sale_id = models.CharField(
         max_length=200, unique=True, blank=True, verbose_name="Sale ID"
     )
-    sale_date = models.DateTimeField(default=timezone.now)  # Changed from auto_now_add
+    sale_date = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, **kwargs):
         if not self.sale_id:
             self.sale_id = str(uuid.uuid4())
+
+        if not self.pk:
+            self.automobile.sold = True
+            self.automobile.save()
+
         super().save(*args, **kwargs)
 
     def get_api_url(self):

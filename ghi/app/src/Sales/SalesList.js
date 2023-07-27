@@ -1,117 +1,70 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Routes, Route, Link } from "react-router-dom";
-import SalesForm from './SalesForm';
-import SaleDetail from './SaleDetail'; // You will need to implement this component
+import React, { useState, useEffect } from 'react';
 
 function SalesList() {
-    const [sales, setSales] = useState([]);
-    const [createMessage, setCreateMessage] = useState(null);
-    const [deleteMessage, setDeleteMessage] = useState(null);
-    const [deleted, setDeleted] = useState(false);
-    const [message, setMessage] = useState(null);
-    const [edited, setEdited] = useState(false);
-    const navigate = useNavigate();
+  const [sales, setSales] = useState([]);
 
-    const getSales = async () => {
-        const response = await fetch('http://localhost:8090/api/sales/');
-        const data = await response.json();
-        if (response.ok) {
-            if (Array.isArray(data.sales)) {
-                setSales(data.sales);
-            } else {
-                console.error('Data fetched from server is not an array:', data);
-            }
-        } else {
-            console.error('Failed to fetch sales');
-        }
-    }
+  const fetchSales = () => {
+    fetch("http://localhost:8090/api/sales/")
+      .then(response => response.json())
+      .then(async data => {
+
+        const salesWithDetails = await Promise.all(data.sales.map(async sale => {
+
+          const automobileResponse = await fetch(`http://localhost:8100/api/automobiles/${sale.automobile}`);
+          const automobile = await automobileResponse.json();
+
+          const salespersonResponse = await fetch(`http://localhost:8090/api/salespeople/${sale.salesperson}`);
+          const salesperson = await salespersonResponse.json();
+
+          const customerResponse = await fetch(`http://localhost:8090/api/customers/${sale.customer}`);
+          const customer = await customerResponse.json();
 
 
-    const fetchSales = async () => {
-        setDeleted(false);
-    };
+          return {
+            ...sale,
+            automobile,
+            salesperson,
+            customer
+          };
+        }));
 
-    useEffect(() => {
-        fetchSales();
-    }, [deleted]);
+        setSales(salesWithDetails);
+      });
+  };
 
-    useEffect(() => {
-        if (edited) {
-            getSales();
-            setEdited(false);
-        }
-    }, [edited]);
+  useEffect(fetchSales, []);
 
-    useEffect(() => {
-        getSales();
-    }, []);
+  if (!sales) {
+    return <div>Loading...</div>;
+  }
 
-    useEffect(() => {
-        if (message) {
-            setTimeout(() => {
-                setMessage(null);
-            }, 3000);
-        }
-    }, [message]);
-
-    useEffect(() => {
-        if (createMessage) {
-            setTimeout(() => {
-                setCreateMessage(null);
-            }, 3000);
-        }
-    }, [createMessage]);
-
-    useEffect(() => {
-        if (deleteMessage) {
-            const timer = setTimeout(() => {
-                setDeleteMessage(null);
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [deleteMessage, setDeleteMessage]);
-
-    return (
-        <div className="container">
-            <Routes>
-                <Route path="/" element={
-                    <div>
-                        <h2>Sales</h2>
-                        {deleteMessage && <div className="alert alert-success">{deleteMessage}</div>}
-                        {createMessage && <div className="alert alert-success">{createMessage}</div>}
-                        <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
-                            <button onClick={() => navigate("new")} className="btn btn-primary btn-lg px-4 gap-3">
-                                Record a Sale
-                            </button>
-                        </div>
-                        {sales && sales.map(sale => {
-                            if (!sale) return null;
-                            return (
-                                <div key={sale.id} className="col-4 mb-4">
-                                    <div className="card">
-                                        <div className="card-body">
-                                            <h5 className="card-title">Sale ID: {sale.sale_id}</h5>
-                                            <p className="card-text">Automobile: {sale.automobile}</p>
-                                            <p className="card-text">Salesperson: {sale.salesperson}</p>
-                                            <p className="card-text">Customer: {sale.customer}</p>
-                                            <p className="card-text">Price: {sale.price}</p>
-                                            <div className="card-footer">
-                                                <Link to={`/sales/${sale.id}`}>View/Edit/Delete</Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                }/>
-                <Route path="new" element={<SalesForm setCreateMessage={setCreateMessage} getSales={getSales} />} />
-                <Route path=":id" element={<SaleDetail getSales={getSales} setDeleted={setDeleted} setEdited={setEdited} setDeleteMessage={setDeleteMessage} />} />
-            </Routes>
-        </div>
-    );
+  return (
+    <div>
+      <button onClick={fetchSales}>Refetch data</button>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th>Salesperson's Name and Employee ID</th>
+            <th>Customer's Name</th>
+            <th>Automobile VIN</th>
+            <th>Price of the sale</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sales && sales.map(sale => {
+            return (
+              <tr key={sale.sale_id}>
+                <td>{`${sale.salesperson.first_name} ${sale.salesperson.last_name} (${sale.salesperson.employee_id})`}</td>
+                <td>{`${sale.customer.first_name} ${sale.customer.last_name}`}</td>
+                <td>{sale.automobile.vin}</td>
+                <td>{sale.price}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export default SalesList;

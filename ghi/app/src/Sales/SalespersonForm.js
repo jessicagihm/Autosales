@@ -29,7 +29,7 @@ function SalespersonForm ({ getSalespeople, setCreateMessage }) {
     if (response.ok) {
       setCreateMessage('Salesperson created successfully');
       getSalespeople();
-      navigate('..'); // Navigate back to the list page
+      navigate('..');
     } else {
       console.error('Failed to create salesperson');
     }

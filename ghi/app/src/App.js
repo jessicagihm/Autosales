@@ -12,9 +12,7 @@ import SalespersonDetail from './Sales/SalespersonDetail';
 import CustomersList from './Sales/CustomersList';
 import CustomerForm from './Sales/CustomerForm';
 import CustomerDetail from './Sales/CustomerDetail';
-import SalesList from './Sales/SalesList';
-import SalesForm from './Sales/SalesForm';
-import SaleDetail from './Sales/SaleDetail';
+
 
 function App() {
   return (
@@ -35,14 +33,11 @@ function App() {
           <Route path="/salespeople/*" element={<SalespeopleList />}>
             <Route path="new" element={<SalespersonForm />} />
             <Route path=":id" element={<SalespersonDetail />} />
+
           </Route>
           <Route path="/customers/*" element={<CustomersList />}>
           <Route path="new" element={<CustomerForm />} />
           <Route path=":id" element={<CustomerDetail />} />
-        </Route>
-        <Route path="/sales/*" element={<SalesList />}>
-          <Route path="new" element={<SalesForm />} />
-          <Route path=":id" element={<SaleDetail />} />
         </Route>
         </Routes>
       </div>
