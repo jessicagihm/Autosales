@@ -1,42 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-async function updateSalesperson(salesperson) {
-  const response = await fetch(`http://localhost:8090/api/salespeople/${salesperson.id}/`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(salesperson),
-  });
 
-  if (!response.ok) {
-    throw new Error(`Failed to update salesperson with id ${salesperson.id}`);
-  }
 
-  const updatedSalesperson = await response.json();
-  return updatedSalesperson;
-}
-
-async function deleteSalesperson(id) {
-  const response = await fetch(`http://localhost:8090/api/salespeople/${id}/`, {
-    method: 'DELETE',
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to delete salesperson with id ${id}`);
-  }
-
-  return id;
-}
-
-function SalespersonDetail({ getSalespeople }) {
+function SalespersonDetail({ getSalespeople, setDeleted, setDeleteMessage, setEdited }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [salesperson, setSalesperson] = useState(null);
   const [editedSalesperson, setEditedSalesperson] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState(null);
+
+  async function updateSalesperson(salesperson) {
+    const response = await fetch(`http://localhost:8090/api/salespeople/${salesperson.id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(salesperson),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update salesperson with id ${salesperson.id}`);
+    }
+
+    const updatedSalesperson = await response.json();
+    return updatedSalesperson;
+  }
+
+  async function deleteSalesperson(id, navigate) {
+      const response = await fetch(`http://localhost:8090/api/salespeople/${id}/`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to delete salesperson with id ${id}`);
+      }
+
+      navigate('/salespeople', { state: { message: 'Salesperson deleted' } });
+    }
+
+
+    const handleDelete = async () => {
+        try {
+          await deleteSalesperson(salesperson.id, navigate);  // pass navigate here
+          setMessage('Salesperson deleted');
+          setDeleteMessage('Salesperson deleted'); // set delete message here
+          setTimeout(() => {
+            setMessage(null);
+            getSalespeople(); // Fetch salespeople data after deleting a salesperson
+            navigate('/salespeople');
+          }, 2000);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
   useEffect(() => {
     const fetchSalesperson = async () => {
@@ -66,18 +84,6 @@ function SalespersonDetail({ getSalespeople }) {
     });
   }
 
-  const handleDelete = async () => {
-    try {
-      await deleteSalesperson(salesperson.id);
-      setMessage('Salesperson deleted');
-      setTimeout(() => {
-        setMessage(null);
-        navigate('/salespeople', { state: { message: 'Salesperson deleted' } });
-      }, 2000);
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   const handleEditSubmit = async (event) => {
     event.preventDefault();
@@ -87,6 +93,7 @@ function SalespersonDetail({ getSalespeople }) {
         await updateSalesperson(editedSalesperson);
         setIsEditing(false);
         setMessage('Profile edited');
+        setEdited(true); // add this
         setTimeout(() => {
           setMessage(null);
           navigate('/salespeople', { state: { message: 'Profile edited' } });
@@ -107,12 +114,13 @@ function SalespersonDetail({ getSalespeople }) {
     return <div>No salesperson found with the specified ID.</div>;
   }
 
+
   return (
-    <div className="salesperson-detail">
+    <div className="card salesperson-detail">
       {message && <div className="alert alert-success">{message}</div>}
       {isEditing ? (
         <form onSubmit={handleEditSubmit}>
-          <label>
+        <label>
             First Name:
             <input type="text" name="first_name" value={editedSalesperson.first_name} onChange={handleEditChange} />
           </label>
@@ -132,14 +140,14 @@ function SalespersonDetail({ getSalespeople }) {
           <button type="button" onClick={handleCancel}>Cancel</button>
         </form>
       ) : (
-        <>
-          <h5>{salesperson.first_name} {salesperson.last_name}</h5>
-          <p>Employee ID: {salesperson.employee_id}</p>
-          <p>Custom ID: {salesperson.custom_id || 'None'}</p>
-          <button onClick={() => setIsEditing(true)}>Edit</button>
-          <button onClick={handleDelete}>Delete</button>
-          <button onClick={handleCancel}>Cancel</button>
-        </>
+        <div className="card-body">
+          <h5 className="card-title">{salesperson.first_name} {salesperson.last_name}</h5>
+          <p className="card-text">Employee ID: {salesperson.employee_id}</p>
+          <p className="card-text">Custom ID: {salesperson.custom_id || 'None'}</p>
+          <button className="btn btn-primary" onClick={() => setIsEditing(true)}>Edit</button>
+          <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+          <button className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
+        </div>
       )}
     </div>
   );

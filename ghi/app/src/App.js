@@ -7,8 +7,9 @@ import AppointmentList from './Service/AppointmentList';
 import AppointmentForm from './Service/AppointmentForm';
 import AppointmentHistory from './Service/AppointmentHistory';
 import SalespeopleList from './Sales/SalespersonList';
-import SalespersonForm from './Sales/SalepersonForm';
+import SalespersonForm from './Sales/SalespersonForm';
 import SalespersonDetail from './Sales/SalespersonDetail';
+
 
 
 function App() {
@@ -27,10 +28,9 @@ function App() {
             <Route path="create" element={<AppointmentForm/>} />
             <Route path="history" element={<AppointmentHistory/>} />
           </Route>
-          <Route path="salespeople">
-            <Route path="" element={<SalespeopleList/>} />
-            <Route path="new" element={<SalespersonForm/>} />
-            <Route path=":id" element={<SalespersonDetail/>} />
+          <Route path="/salespeople/*" element={<SalespeopleList />}>
+            <Route path="new" element={<SalespersonForm />} />
+            <Route path=":id" element={<SalespersonDetail />} />
           </Route>
         </Routes>
       </div>
