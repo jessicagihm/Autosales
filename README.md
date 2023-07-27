@@ -20,7 +20,6 @@ docker-compose up
 - **Sales**
 ![img](/images/CarCarDiagram.png)
 
-
 ## Service microservice
  Inventory API
 1. Manufacturers URLS
