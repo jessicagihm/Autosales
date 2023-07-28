@@ -6,7 +6,6 @@ function CustomerForm({ getCustomers, setCreateMessage }) {
   const [lastName, setLastName] = useState('');
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [customerId, setCustomerId] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -17,7 +16,6 @@ function CustomerForm({ getCustomers, setCreateMessage }) {
       last_name: lastName,
       address: address,
       phone_number: phoneNumber,
-      customer_id: customerId,
     };
 
     const response = await fetch('http://localhost:8090/api/customers/', {
@@ -58,10 +56,6 @@ function CustomerForm({ getCustomers, setCreateMessage }) {
             <div className="form-floating mb-3">
               <input name="phone_number" onChange={(e) => setPhoneNumber(e.target.value)} value={phoneNumber} placeholder="Phone Number" className="form-control" id="phone_number"/>
               <label htmlFor="phone_number">Phone Number</label>
-            </div>
-            <div className="form-floating mb-3">
-              <input name="customer_id" onChange={(e) => setCustomerId(e.target.value)} value={customerId} placeholder="Customer ID" className="form-control" id="customer_id"/>
-              <label htmlFor="customer_id">Customer ID</label>
             </div>
             <button className="btn btn-primary">Add</button>
             <button type="button" className="btn btn-secondary" onClick={() => navigate('..')}>Cancel</button>
