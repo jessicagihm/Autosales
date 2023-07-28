@@ -81,7 +81,7 @@ function SalespeopleList() {
             {deleteMessage && <div className="alert alert-success">{deleteMessage}</div>}
             {createMessage && <div className="alert alert-success">{createMessage}</div>}
             <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
-              <button onClick={() => navigate("new")} className="btn btn-primary btn-lg px-4 gap-3">
+              <button onClick={() => navigate("create")} className="btn btn-primary btn-lg px-4 gap-3">
                 Add a Salesperson
               </button>
             </div>
@@ -104,7 +104,7 @@ function SalespeopleList() {
               })}
           </div>
         }/>
-        <Route path="new" element={<SalespersonForm setCreateMessage={setCreateMessage} getSalespeople={getSalespeople} />} />
+        <Route path="create" element={<SalespersonForm setCreateMessage={setCreateMessage} getSalespeople={getSalespeople} />} />
         <Route path=":id" element={<SalespersonDetail getSalespeople={getSalespeople} setDeleted={setDeleted} setEdited={setEdited} setDeleteMessage={setDeleteMessage} />} />
       </Routes>
     </div>

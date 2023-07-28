@@ -1,68 +1,66 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function SalesList() {
   const [sales, setSales] = useState([]);
+  const [salespeople, setSalespeople] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [automobiles, setAutomobiles] = useState([]);
 
-  const fetchSales = () => {
-    fetch("http://localhost:8090/api/sales/")
+  useEffect(() => {
+    fetch('http://localhost:8090/api/sales/')
       .then(response => response.json())
-      .then(async data => {
+      .then(data => setSales(data.sales));
 
-        const salesWithDetails = await Promise.all(data.sales.map(async sale => {
+    fetch('http://localhost:8090/api/salespeople/')
+      .then(response => response.json())
+      .then(data => setSalespeople(data.salespeople));
 
-          const automobileResponse = await fetch(`http://localhost:8100/api/automobiles/${sale.automobile}`);
-          const automobile = await automobileResponse.json();
+    fetch('http://localhost:8090/api/customers/')
+      .then(response => response.json())
+      .then(data => setCustomers(data.customers));
 
-          const salespersonResponse = await fetch(`http://localhost:8090/api/salespeople/${sale.salesperson}`);
-          const salesperson = await salespersonResponse.json();
-
-          const customerResponse = await fetch(`http://localhost:8090/api/customers/${sale.customer}`);
-          const customer = await customerResponse.json();
-
-
-          return {
-            ...sale,
-            automobile,
-            salesperson,
-            customer
-          };
-        }));
-
-        setSales(salesWithDetails);
-      });
-  };
-
-  useEffect(fetchSales, []);
-
-  if (!sales) {
-    return <div>Loading...</div>;
-  }
+    fetch('http://localhost:8100/api/automobiles/')
+      .then(response => response.json())
+      .then(data => setAutomobiles(data.autos));
+  }, []);
 
   return (
-    <div>
-      <button onClick={fetchSales}>Refetch data</button>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th>Salesperson's Name and Employee ID</th>
-            <th>Customer's Name</th>
-            <th>Automobile VIN</th>
-            <th>Price of the sale</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sales && sales.map(sale => {
-            return (
-              <tr key={sale.sale_id}>
-                <td>{`${sale.salesperson.first_name} ${sale.salesperson.last_name} (${sale.salesperson.employee_id})`}</td>
-                <td>{`${sale.customer.first_name} ${sale.customer.last_name}`}</td>
-                <td>{sale.automobile.vin}</td>
-                <td>{sale.price}</td>
+    <div className="row">
+      <div className="offset-3 col-6">
+        <div>
+          <h1>Sales</h1>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Automobile</th>
+                <th>Salesperson</th>
+                <th>Customer</th>
+                <th>Price</th>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {sales.map(sale => {
+                const automobile = automobiles.find(auto => auto.id === sale.automobile);
+                const salesperson = salespeople.find(sp => sp.id === sale.salesperson);
+                const customer = customers.find(cust => cust.id === sale.customer);
+
+                return (
+                  <tr key={sale.id}>
+                    <td>{automobile ? automobile.vin : ''}</td>
+                    <td>{salesperson ? `${salesperson.first_name} ${salesperson.last_name}` : ''}</td>
+                    <td>{customer ? `${customer.first_name} ${customer.last_name}` : ''}</td>
+                    <td>{sale.price}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
+          <Link to="/sales/new" className="btn btn-primary">Add a Sale</Link>
+        </div>
+      </div>
     </div>
   );
 }

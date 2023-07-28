@@ -155,10 +155,10 @@ def api_list_salespeople(request):
                 {"message": f"Could not get salespeople: {str(e)}"},
                 status=400,
             )
-    else:  # POST request
+    else:
         try:
             content = json.loads(request.body)
-            # Remove the employee_id from the content if it's empty
+
             if not content.get("employee_id"):
                 del content["employee_id"]
             salesperson = Salesperson.objects.create(**content)
@@ -219,21 +219,19 @@ def api_detail_salesperson(request, id):
             )
 
 
-@require_http_methods(["GET", "POST"])
 def api_sales(request):
     if request.method == "GET":
         sales = Sale.objects.all()
-        return JsonResponse(
-            {"sales": [model_to_dict(sale) for sale in sales]},
-            safe=False,
-        )
+        sales_data = [model_to_dict(sale) for sale in sales]
+        return JsonResponse({"sales": sales_data}, encoder=SaleEncoder, safe=False)
+
     else:
         content = json.loads(request.body)
     try:
         # Get the instances of the associated models
         automobile = AutomobileVO.objects.get(vin=content.pop("automobile_vin"))
-        salesperson = Salesperson.objects.get(id=content.pop("salesperson_id"))
-        customer = Customer.objects.get(id=content.pop("customer_id"))
+        salesperson = Salesperson.objects.get(employee_id=content.pop("salesperson_id"))
+        customer = Customer.objects.get(customer_id=content.pop("customer_id"))
     except (
         AutomobileVO.DoesNotExist,
         Salesperson.DoesNotExist,

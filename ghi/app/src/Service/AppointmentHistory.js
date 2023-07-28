@@ -1,75 +1,65 @@
 import { useEffect, useState } from "react";
 
-function AppointmentHistory() {
-  const [appointments, setAppointments] = useState([]);
+function SalesHistory() {
+  const [sales, setSales] = useState([]);
   const [searchText, setSearchText] = useState("");
 
-  const fetchAppointments = async () => {
-    const response = await fetch('http://localhost:8080/api/appointments/');
+  const fetchSales = async () => {
+    const response = await fetch('http://localhost:8090/api/sales/');
     if (response.ok) {
       const data = await response.json();
-      setAppointments(data.appointments);
+      setSales(data.sales);
     } else {
       console.error(response);
     }
   }
 
-  const searchAppointments = async () => {
+  const searchSales = async () => {
     if(!searchText){
-      await fetchAppointments()
+      await fetchSales()
       return
     }
-    const filtered = appointments.filter(function(x) {
-      const doesmatch = x.vin.indexOf(searchText) > -1;
+    const filtered = sales.filter(function(sale) {
+      const doesmatch = sale.automobile.vin.indexOf(searchText) > -1;
       if (doesmatch){
         return true
       }
         return false
     })
-    setAppointments(filtered)
+    setSales(filtered)
   }
 
   const handleTextChange = (event) => {
-
-
     setSearchText(event.target.value)
   }
 
-
-
   useEffect(() => {
-    fetchAppointments();
+    fetchSales();
   }, []);
-
-
 
   return (
     <div>
       <input onChange={handleTextChange} value={searchText} type="search" placeholder="Search by VIN..." />
-      <button onClick={searchAppointments}>Search</button>
+      <button onClick={searchSales}>Search</button>
 
       <table className="table table-striped">
         <thead>
           <tr>
             <th>VIN</th>
-            <th>Is VIP?</th>
+            <th>Salesperson</th>
             <th>Customer</th>
-            <th>Date/Time</th>
-            <th>Technician</th>
-            <th>Reason</th>
-            <th>Status</th>
+            <th>Price</th>
+            <th>Sale Date</th>
           </tr>
         </thead>
         <tbody>
-          {appointments.map(appt => {
-            return (<tr key={appt.id}>
-              <td>{appt.vin}</td>
-              <td>{String(appt.vip)}</td>
-              <td>{appt.customer}</td>
-              <td>{appt.date_time}</td>
-              <td>{appt.technician.first_name} {appt.technician.last_name}</td>
-              <td>{appt.reason}</td>
-              <td>{appt.status}</td>
+          {sales.map(sale => {
+            return (<tr key={sale.id}>
+              <td>{sale.automobile.vin}</td>
+              <td>{sale.salesperson.first_name} {sale.salesperson.last_name}</td>
+              <td>{sale.customer.first_name} {sale.customer.last_name}</td>
+              <td>{sale.price}</td>
+              <td>{sale.sale_date}</td>
             </tr>
             )
           })}
@@ -79,6 +69,4 @@ function AppointmentHistory() {
   )
 }
 
-export default AppointmentHistory;
-
-
+export default SalesHistory;

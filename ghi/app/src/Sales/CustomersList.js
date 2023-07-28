@@ -77,7 +77,7 @@ function CustomersList() {
             {deleteMessage && <div className="alert alert-success">{deleteMessage}</div>}
             {createMessage && <div className="alert alert-success">{createMessage}</div>}
             <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
-              <button onClick={() => navigate("new")} className="btn btn-primary btn-lg px-4 gap-3">
+              <button onClick={() => navigate("create")} className="btn btn-primary btn-lg px-4 gap-3">
                 Add a Customer
               </button>
             </div>
@@ -101,7 +101,7 @@ function CustomersList() {
               })}
           </div>
         }/>
-        <Route path="new" element={<CustomerForm setCreateMessage={setCreateMessage} getCustomers={getCustomers} />} />
+        <Route path="create" element={<CustomerForm setCreateMessage={setCreateMessage} getCustomers={getCustomers} />} />
         <Route path=":id" element={<CustomerDetail getCustomers={getCustomers} setDeleted={setDeleted} setEdited={setEdited} setDeleteMessage={setDeleteMessage} />} />
       </Routes>
     </div>
