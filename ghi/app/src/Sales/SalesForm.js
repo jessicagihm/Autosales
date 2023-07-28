@@ -67,6 +67,19 @@ function SalesForm() {
       return;
     }
 
+    const updateResponse = await fetch(`http://localhost:8100/api/automobiles/${selectedAutomobile}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ sold: true }),
+    });
+
+    if (!updateResponse.ok) {
+      console.error('There was an error updating the car status', await updateResponse.text());
+      return;
+    }
+
     navigate('/sales');
   }
 
