@@ -120,7 +120,7 @@ def api_detail_customer(request, id):
                 {"message": f"Could not delete customer: {str(e)}"},
                 status=400,
             )
-    else:  # PUT request
+    else:
         try:
             content = json.loads(request.body)
             for key, value in content.items():
