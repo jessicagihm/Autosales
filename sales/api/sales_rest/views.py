@@ -79,9 +79,6 @@ def api_list_customers(request):
     else:
         try:
             content = json.loads(request.body)
-
-            if not content.get("customer_id"):
-                del content["customer_id"]
             customer = Customer.objects.create(**content)
             return JsonResponse(
                 model_to_dict(customer),
@@ -123,7 +120,7 @@ def api_detail_customer(request, id):
                 {"message": f"Could not delete customer: {str(e)}"},
                 status=400,
             )
-    else:  # PUT request
+    else:
         try:
             content = json.loads(request.body)
             for key, value in content.items():
