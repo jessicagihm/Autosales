@@ -45,7 +45,7 @@ function ModelsForm ({ getModels }) {
               setPictureUrl("");
               setManufacturerId("");
 
-              await getModels(); // Wait for getModels to finish before navigating
+              await getModels();
               navigate('/models', { state: { message: 'Model Created' } });
             } else {
               const errorResponse = await response.json();

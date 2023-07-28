@@ -19,7 +19,7 @@ class Salesperson(models.Model):
         return reverse("api_show_salesperson", kwargs={"pk": self.pk})
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"  # Changed from self.name
+        return f"{self.first_name} {self.last_name}"
 
 
 class Customer(models.Model):

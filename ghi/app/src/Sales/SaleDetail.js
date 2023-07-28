@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-function SaleDetail({ getSales, setDeleted, setDeleteMessage, setEdited }) {
+function SaleDetail({ getSales, setDeleteMessage, setEdited }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [sale, setSale] = useState(null);

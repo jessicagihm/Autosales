@@ -35,7 +35,7 @@ function AutomobileForm({ getAutomobiles }) {
                 setVin("");
                 setModelId("");
 
-                await getAutomobiles(); // Wait for getAutomobiles to finish before navigating
+                await getAutomobiles();
                 navigate('/automobiles', { state: { message: 'Automobile Created' } });
             } else {
                 const errorResponse = await response.json();
@@ -44,7 +44,7 @@ function AutomobileForm({ getAutomobiles }) {
         } catch (error) {
             console.error('Failed to create automobile:', error);
         }
-    };  // Added closing brace here
+    };
 
     return (
         <div className="row">

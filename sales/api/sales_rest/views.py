@@ -76,10 +76,10 @@ def api_list_customers(request):
                 {"message": f"Could not get customers: {str(e)}"},
                 status=400,
             )
-    else:  # POST request
+    else:
         try:
             content = json.loads(request.body)
-            # Remove the customer_id from the content if it's empty
+
             if not content.get("customer_id"):
                 del content["customer_id"]
             customer = Customer.objects.create(**content)
@@ -201,7 +201,7 @@ def api_detail_salesperson(request, id):
                 {"message": f"Could not delete salesperson: {str(e)}"},
                 status=400,
             )
-    else:  # PUT request
+    else:
         try:
             content = json.loads(request.body)
             for key, value in content.items():
@@ -228,7 +228,6 @@ def api_sales(request):
     else:
         content = json.loads(request.body)
     try:
-        # Get the instances of the associated models
         automobile = AutomobileVO.objects.get(vin=content.pop("automobile_vin"))
         salesperson = Salesperson.objects.get(employee_id=content.pop("salesperson_id"))
         customer = Customer.objects.get(customer_id=content.pop("customer_id"))
@@ -242,7 +241,6 @@ def api_sales(request):
             status=400,
         )
 
-    # Create a new Sale object
     try:
         sale = Sale.objects.create(
             automobile=automobile,
