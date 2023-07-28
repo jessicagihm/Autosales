@@ -20,22 +20,19 @@ function SalesHistory() {
       .then(response => response.json())
       .then(data => setCustomers(data.customers));
 
-    fetch('http://localhost:8090/api/automobiles/')
+    fetch('http://localhost:8100/api/automobiles/')
       .then(response => response.json())
-      .then(data => setAutomobiles(data.automobiles));
+      .then(data => setAutomobiles(data.autos));
   }, []);
 
-  const salespersonSales = sales.filter(
-    sale => sale.salesperson === selectedSalesperson
-  );
-
+  const salespersonSales = sales.filter(sale => sale.salesperson === selectedSalesperson);
   const selectedSalespersonData = salespeople.find(s => s.id === selectedSalesperson);
 
   return (
     <div>
       <h1>Sales History</h1>
 
-      <select value={selectedSalesperson || ''} onChange={e => setSelectedSalesperson(e.target.value)}>
+      <select value={selectedSalesperson || ''} onChange={e => setSelectedSalesperson(Number(e.target.value))}>
         <option value="">Select a salesperson</option>
         {salespeople.map(salesperson => (
           <option key={salesperson.id} value={salesperson.id}>
