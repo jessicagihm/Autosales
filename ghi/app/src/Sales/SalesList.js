@@ -58,7 +58,7 @@ function SalesList() {
           </table>
         </div>
         <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
-          <Link to="/sales/new" className="btn btn-primary">Add a Sale</Link>
+          <Link to="/sales/create" className="btn btn-primary">Add a Sale</Link>
         </div>
       </div>
     </div>
