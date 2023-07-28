@@ -31,7 +31,7 @@ function CustomerForm({ getCustomers, setCreateMessage }) {
     if (response.ok) {
       setCreateMessage('Customer created successfully');
       getCustomers();
-      navigate('..');
+      navigate('/customers');
     } else {
       console.error('Failed to create customer');
     }

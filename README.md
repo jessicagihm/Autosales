@@ -60,3 +60,14 @@ Service API
 
 Explain your models and integration with the inventory
 microservice, here.
+
+CarCar is an app for Client-end management of an automobile service.
+-It manages Inventory, Sales, and Service, along with the staff in said departments.
+-Structurally the app is built on RestfulApi's for each service with intergrated polling on the service and sales branchs to allow for continuous updating of and fetching from the database. We used a react front end, designed to be new-user friendly and technician friendly, easily customizable to fit future client demands.
+
+The Sales models include,
+-Salesperson
+It's fields include:
+First name
+Last name
+Employee_Id- (a uuid number auto-generated to )
