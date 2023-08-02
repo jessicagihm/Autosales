@@ -22,8 +22,13 @@ import ModelsForm from './Inventory/ModelForm';
 import ModelsList from './Inventory/ModelList';
 import SalesHistory from './Sales/SalesHistory';
 
+
+
+
 function App() {
   return (
+
+
     <BrowserRouter>
       <Nav />
       <div className="container">
